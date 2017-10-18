@@ -70,8 +70,16 @@ if [ ! "$M2SETUP_INSTALL_DB" = "false" ]; then
     fi
 
     $INSTALL_COMMAND
+    $MAGENTO_COMMAND setup:config:set -n \
+        --cache-backend=$M2SETUP_REDIS_HOST \
+        --cache-backend-redis-server=$M2SETUP_REDIS_HOST \
+        --session-save=$M2SETUP_REDIS_HOST \
+        --session-save-redis-host=$M2SETUP_REDIS_HOST
     $MAGENTO_COMMAND index:reindex
-    $MAGENTO_COMMAND setup:static-content:deploy
+
+    if [ "MAGENTO_RUN_MODE" = "production" ]; then
+        $MAGENTO_COMMAND setup:static-content:deploy
+    fi
 
 else
     echo "Skipping DB installation"

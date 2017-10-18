@@ -34,6 +34,7 @@ services:
       - 9000
     links:
       - db
+      - redis
     volumes_from:
       - appdata
     env_file:
@@ -51,11 +52,17 @@ services:
       - MYSQL_USER=magento2
       - MYSQL_PASSWORD=magento2
 
+  redis:
+      image: redis:4
+      ports:
+        - 6379
+
   cli:
     hostname: cli.magento2.docker
     image: meanbee/magento2-php:7.1-cli
     links:
       - db
+      - redis
     volumes:
       - ~/.composer/cache:/root/.composer/cache
     volumes_from:
@@ -78,6 +85,7 @@ services:
       - M2SETUP_ADMIN_USER=admin
       - M2SETUP_ADMIN_PASSWORD=password1
       - M2SETUP_VERSION=2.2.*
+      - M2SETUP_REDIS_HOST=redis
       # - M2SETUP_USE_SAMPLE_DATA=true
 
   cron:
@@ -92,6 +100,7 @@ services:
       - appdata
     links:
       - db
+      - redis
 
   appdata:
     image: tianon/true
