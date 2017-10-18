@@ -50,11 +50,10 @@ services:
       - MYSQL_DATABASE=magento2
       - MYSQL_USER=magento2
       - MYSQL_PASSWORD=magento2
-      - TERM=meh
 
   cli:
     hostname: cli.magento2.docker
-    image: meanbee/magento2-php:7.0-cli
+    image: meanbee/magento2-php:7.1-cli
     links:
       - db
     volumes:
@@ -78,23 +77,21 @@ services:
       - M2SETUP_ADMIN_EMAIL=dummy@gmail.com
       - M2SETUP_ADMIN_USER=admin
       - M2SETUP_ADMIN_PASSWORD=password1
-      - M2SETUP_VERSION=2.1.*
+      - M2SETUP_VERSION=2.2.*
       # - M2SETUP_USE_SAMPLE_DATA=true
 
   cron:
-    image: meanbee/magento2-php:7.0-cli
+    image: meanbee/magento2-php:7.1-cli
     hostname: magento2-cron.docker
     command: run-cron
     env_file:
-      - ./global.env    
+      - ./global.env
     environment:
       - ENABLE_SENDMAIL=true
     volumes_from:
       - appdata
     links:
       - db
-    env_file:
-      - ./global.env      
 
   appdata:
     image: tianon/true
